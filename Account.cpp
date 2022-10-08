@@ -190,9 +190,9 @@ void validate_Input(int& input, int numberofaccount, Account account[]) {
 	while ((input > numberofaccount || input <= 0) || (account[input].get_AccountNo() == ""))
 		cin >> input;
 }
-void Account::read_and_store_accounts(Account AccountArray[], int & AccountCounter)
+void Account::read_and_store_accounts(Account AccountArray[], int& AccountCounter)
 {
-	string FileCheck,AccountStatus, AccountType;
+	string FileCheck, AccountStatus, AccountType;
 
 	ifstream AccoutFile("AccountsSeverDataBase.txt");
 	if (!AccoutFile)
@@ -219,7 +219,7 @@ void Account::read_and_store_accounts(Account AccountArray[], int & AccountCount
 		else
 			AccountArray[AccountCounter].isActive = 0;
 		AccoutFile >> (AccountArray[AccountCounter].Minimum_Balance)
-		>> AccountType;
+			>> AccountType;
 		if (AccountType == "Saving")
 			AccountArray[AccountCounter].Account_Type = 'S';
 		else

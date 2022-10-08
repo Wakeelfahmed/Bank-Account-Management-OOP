@@ -1,3 +1,4 @@
+#pragma once
 #include<string>
 #include<iostream>
 #include<ctime>
@@ -5,7 +6,6 @@
 #include<string.h>
 #include<fstream>
 using namespace std;
-#pragma once
 class Account
 {
 private:
@@ -40,7 +40,7 @@ public:
 	bool Suffient_Balance(long long int Amount);
 	~Account();//Destructor
 	void saving_dedution(long long int balance);
-	void read_and_store_accounts(Account AccountArray[], int & AccountCounter);
+	void read_and_store_accounts(Account AccountArray[], int& AccountCounter);
 }; //End of class
 bool transfer(Account& source, Account& destination, long long int amount);
 void validate_Input(int start, int& input, int accounts);
