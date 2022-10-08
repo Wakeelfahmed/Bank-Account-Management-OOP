@@ -184,7 +184,7 @@ bool transfer(Account& source, Account& destination, long long int amount)
 }
 void validate_Input(int start, int& input, int end) {
 	while (input < start || input > end)
-		cin >> input;
+		input = _getch() - '0';
 }
 void validate_Input(int& input, int numberofaccount, Account account[]) {
 	while ((input > numberofaccount || input <= 0) || (account[input].get_AccountNo() == ""))
@@ -248,6 +248,7 @@ void ExportAsReadable(Account A[], int num_of_Accounts) {
 		else
 			Accoufile << "Account Type:Saving Account" << endl;
 	}
+	cout << "Data has been successfully exported\n";
 }
 void ExportAsBackup(Account A[], int num_of_Accounts) {
 	ofstream Accoufile;
@@ -269,4 +270,5 @@ void ExportAsBackup(Account A[], int num_of_Accounts) {
 			Accoufile << "Saving\n";
 		Accoufile << A[i].getPIN();
 	}
+	cout << "Data has been successfully exported\n";
 }
