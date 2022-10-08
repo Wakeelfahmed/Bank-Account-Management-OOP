@@ -6,11 +6,14 @@
 #include"Account.h"
 using namespace std;
 Account A[50]; //Global (class)Account Object array.
-
-
+int Input_1 = 0, UI_Input = 0, Input_2 = 0, loop = 1;
+void Bank_Main_Menu() {
+	cout << "Welcome to Bank Account Management System" << endl;
+	cout << "Press 0 to Manage Account DataBase" << "\tPress 1 to Create a Account" << endl;
+	UI_Input = _getch() - '0';
+}
 int main()
 {
-	int Input_1 = 0, UI_Input = 0, Input_2 = 0, loop = 1;
 	int static No_of_AccountsCounter = 0;
 	long long int Amount;
 	char sure;
@@ -26,7 +29,7 @@ int main()
 		{
 		case 0:
 			cout << "Press 0 to Import\tPress 1 to Export As Readable\tPress 2 to Export As Backup\n";
-			cin >> Input_1;
+			Input_1 = _getch() - '0';
 			if (Input_1 == 0) {
 				A[0].read_and_store_accounts(A, No_of_AccountsCounter);
 			}
@@ -72,7 +75,7 @@ int main()
 			else
 			{
 				cout << "Press 0 to go to back Menu" << "\tPress 1 to reset PIN" << "\tPress 2 to Close Account";
-				cin >> Input_1;
+				Input_1 = _getch() - '0';
 				validate_Input(0, Input_1, 2); //Input validation
 				if (Input_1 == 1)//Reset PIN
 				{
@@ -82,7 +85,7 @@ int main()
 				if (Input_1 == 2) //Close Account
 				{
 					cout << "Are you sure you want to close your account: Press Y to proceed\\N to stop:";
-					cin >> sure;
+					sure = _getch();
 					if (sure == 'Y' || sure == 'y') //Confirmation to close Account
 					{
 						A[Input_2].~Account(); //To Delete an account.
@@ -155,7 +158,7 @@ int main()
 			if (No_of_AccountsCounter >= 2) cout << "Press 5 to Transfer Funds\n";
 			cout << "Press 6 to Exit Program" << endl;
 		}
-		cin >> UI_Input;
+		UI_Input = _getch() - '0';
 		if (No_of_AccountsCounter == 0)
 			validate_Input(0, UI_Input, 1);
 		else if (No_of_AccountsCounter >= 1) {
