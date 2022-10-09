@@ -1,16 +1,21 @@
 #include "Account.h"
-Account::Account() :Balance(0), isActive(0), Minimum_Balance(1000), Account_Type('S'), PIN("0000") {}
-Account::Account(string accountNo1, long long int Balance, bool isActive1, int minBalance1, char accountType1)//Parametrized Constructor
+Account::Account() :Name(""), Balance(0), isActive(0), Minimum_Balance(1000), Account_Type('S'), PIN("0000") {}
+Account::Account(char Name[], string Account_Num, long double Balance, bool isActive, int Minimum_Balance, char accountType1)//Parametrized Constructor
 {
-	Account_Num = accountNo1; this->Balance = Balance; isActive = isActive1; Minimum_Balance = minBalance1; Account_Type = accountType1;	strcpy_s(PIN, "0000");
+	strcpy_s(this->Name, Name);
+	this->Account_Num = Account_Num; this->Balance = Balance;
+	this->isActive = isActive;		this->Minimum_Balance = Minimum_Balance;
+	this->Account_Type = accountType1;	strcpy_s(PIN, "0000");
 }
-void Account::set() {
+void Account::Account_Creation() {
 	srand(time(0));
-	cout << "Press \'C\' to Create Current Account or \'S\' to Create Saving Account " << endl
-		<< "Note:Current Account Minimum limit:Rs.5000/- Saving Account Minimum limit:Rs.1000/-" << endl;
-	cin >> Account_Type;
+	cout << "Account Creation" << endl 
+		<< "Note Minimum Balance limit: Current Account: Rs.5000/- \t Saving Account: Rs.1000/-";
+	cout << "\nSelect Account Type" << endl;
+	cout << "\'C\'. Current Account \n\'S\'. Saving Account" << endl;
+	Account_Type = _getch();
 	while (!(Account_Type == 's' || Account_Type == 'S' || Account_Type == 'C' || Account_Type == 'c'))
-		cin >> Account_Type;
+		Account_Type = _getch();
 	if (is_current_or_saving_accountType())
 		Minimum_Balance = 5000;
 	else
@@ -33,8 +38,7 @@ void Account::set() {
 	}
 	cout << Account_Num;
 	cout << "\nEnter Account Holder Name:";
-	cin.ignore();
-	getline(cin, Account_Holder_Name);
+	cin >> Name;
 	cout << "Enter the Amount You Want To Add in account:";
 	cin >> Balance;
 	saving_dedution(Balance);
@@ -50,29 +54,29 @@ void Account::set_accountNo() {
 	cout << "AccountNo:";
 	cin >> Account_Num;
 }
-void Account::set_balance(long long int a) {
+void Account::set_balance(long double a) {
 	Balance = a;
 }
-void Account::update_balance(long long int a) {
+void Account::update_balance(long double a) {
 	Balance = Balance + a;
 }
 void Account::setisActive() {
 	cout << "\nisActive:";
-	cin >> isActive;
+	isActive = _getch();
 }
 void Account::set_MinBalance() {
 	cout << "\nMinimum Balance:";
-	cin >> Minimum_Balance;
+	Minimum_Balance = _getch();
 }
 void Account::set_accountType() {
 	cout << "\nAccountType:";
-	cin >> Account_Type;
+	Account_Type = _getch();
 }
-void Account::get()
+void Account::get() const
 {
 	cout << "\nACCOUNT DETAILS" << endl
 		<< "AccountNo:" << Account_Num << endl
-		<< "Account Holder Name:" << Account_Holder_Name << endl
+		<< "Account Holder Name:" << Name << endl
 		<< "Balance:Rs." << Balance << "/-" << endl;
 	if (is_Active())
 		cout << "Account Status:Active" << endl;
@@ -84,13 +88,13 @@ void Account::get()
 	else
 		cout << "Account Type:Saving Account" << endl;
 }
-string Account::get_AccountNo() {
+string Account::get_AccountNo() const {
 	return Account_Num;
 }
-string Account::get_Account_Holder_Name() {
-	return Account_Holder_Name;
+char* Account::get_Account_Holder_Name() {
+	return Name;
 }
-long long int Account::get_balance() {
+long double Account::get_balance()  const {
 	return Balance;
 }
 int Account::get_minBalance() {
@@ -100,14 +104,14 @@ int Account::get_minBalance() {
 		Minimum_Balance = 1000;
 	return Minimum_Balance;
 }
-bool Account::is_current_or_saving_accountType() {
+bool Account::is_current_or_saving_accountType()  const {
 	if (Account_Type == 'C' || Account_Type == 'c')
 		return 1;
 	else if (Account_Type == 'S' || Account_Type == 's')
 		return 0;
 }
 void Account::Deposit() {
-	long long int Deposit_Amount = 0, SUM = 0;
+	long double Deposit_Amount = 0, SUM = 0;
 	if (Balance >= Minimum_Balance)
 	{
 		cout << "Enter Amount to Deposit:";
@@ -141,24 +145,24 @@ void Account::Withdraw()
 	else
 		cout << "Transaction failed!!" << endl << "Account is Dormant" << endl;
 }
-bool Account::is_Active()
+bool Account::is_Active() const
 {
 	if (Balance >= Minimum_Balance)
 		return true;
 	else
 		return false;
 }
-bool Account::Suffient_Balance(long long int Amount)
+bool Account::Suffient_Balance(long double Amount)  const
 {
 	if (Balance >= Amount)
 		return 1;
 	else
 		return 0;
 }
-void Account::saving_dedution(long long int balance) {
+void Account::saving_dedution(long double balance) {
 	if (!is_current_or_saving_accountType())
 	{
-		Balance = (Balance - (balance * long long int(2.5 / 100)));
+		Balance = (Balance - (balance * float(float(2.5) / 100)));
 		cout << "2.5% of the amount has been deducted\nNew Balance is:" << Balance << endl;
 	}
 }
@@ -166,7 +170,7 @@ Account::~Account() //Destructor
 {
 	isActive = 0; Balance = 0;
 }
-bool transfer(Account& source, Account& destination, long long int amount)
+bool transfer(Account& source, Account& destination, long double amount)
 {
 	if (source.is_Active())
 	{
@@ -188,7 +192,7 @@ void validate_Input(int start, int& input, int end) {
 }
 void validate_Input(int& input, int numberofaccount, Account account[]) {
 	while ((input > numberofaccount || input <= 0) || (account[input].get_AccountNo() == ""))
-		cin >> input;
+		input = _getch();
 }
 void Account::read_and_store_accounts(Account AccountArray[], int& AccountCounter)
 {
@@ -209,9 +213,10 @@ void Account::read_and_store_accounts(Account AccountArray[], int& AccountCounte
 	while (!AccoutFile.eof())
 	{
 		AccountCounter++;
-		cout << "Reading  Accountnumber" << AccountCounter << endl;
+		cout << "Reading Accountnumber" << AccountCounter << endl;
 		AccoutFile >> (AccountArray[AccountCounter].Account_Num);
-		AccoutFile >> (AccountArray[AccountCounter].Account_Holder_Name);
+		cout << "Read" << endl;
+		AccoutFile >> (AccountArray[AccountCounter].Name);
 		AccoutFile >> (AccountArray[AccountCounter].Balance);
 		AccoutFile >> AccountStatus;
 		if (AccountStatus == "Active")
