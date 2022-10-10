@@ -19,13 +19,15 @@ int main()
 	long double Amount;
 	char sure;
 	Bank_Main_Menu();
+	validate_Input(0, UI_Input, 1);//Input validation
 	if (UI_Input == 0)
 		validate_Input(0, UI_Input, 1);//Input validation
 	while (UI_Input == 0 || UI_Input == 1 || UI_Input == 2 || UI_Input == 3 || UI_Input == 4 || UI_Input == 5)//Input 6 terminates this loop.
 	{
 		switch (UI_Input)
 		{
-		case 0:
+		case 0://Database
+		{
 			system("CLS");
 			cout << "0. Import\t1. Export As Readable\t2. Export As Backup\n";
 			Input[0] = _getch() - '0';
@@ -36,13 +38,13 @@ int main()
 			else if (Input[0] == 2)
 				ExportAsBackup(A, No_of_AccountsCounter);
 			break;
+		}
 		case 1: //Create Account
 		{
 			system("CLS");
 			No_of_AccountsCounter++;
 			cout << "# of As:" << No_of_AccountsCounter << endl;
 			A[No_of_AccountsCounter].Account_Creation();
-			//No_of_AccountsCounter++;
 			break;
 		}//end of Case 1
 		case 2: //Manage Accounts
@@ -72,7 +74,7 @@ int main()
 			}
 			else
 			{
-				cout << "0. Back To Menu" << "\t\t1. Reset PIN" << "\t2. Close Account" << endl;
+				cout << "0. Back To Menu" << " \t1. Reset PIN" << "\t2. Close Account" << endl;
 				Input[0] = _getch() - '0';
 				validate_Input(0, Input[0], 2); //Input validation
 				if (Input[0] == 1)//Reset PIN
@@ -103,11 +105,14 @@ int main()
 		case 3: //Deposit Money
 		{
 			system("CLS");
-			cout << "Select Account To Deposit Money To" << endl;
+			cout << "Select Account To Deposit Money Into" << endl;
 			for (loop = 1; loop <= No_of_AccountsCounter; loop++)
-				cout << loop << ". Deposit Money into " << A[loop].get_Account_Holder_Name() << endl;
+				cout << loop << ". " << A[loop].get_Account_Holder_Name() << endl;
+			cout << "0. Cancel";
 			Input[1] = _getch() - '0';
-			validate_Input(1, Input[1], No_of_AccountsCounter);
+			validate_Input(0, Input[1], No_of_AccountsCounter);
+			if (Input[1] == 0)
+				break;
 			A[Input[1]].Deposit();
 			break;
 		}//end of Case 3
@@ -125,22 +130,33 @@ int main()
 		case 5: //Transfer Money
 		{
 			system("CLS");
+			cout << "Select Account To Transfer Funds FROM:" << endl;
 			for (loop = 1; loop <= No_of_AccountsCounter; loop++)
-				cout << "\'" << loop << "\'. Select Account " << A[loop].get_Account_Holder_Name() << endl;
-			cout << "Select Account. Transfer Funds FROM:";
+				cout << "\'" << loop << "\'. " << A[loop].get_Account_Holder_Name() << endl;
 			Input[0] = _getch() - '0';
 			validate_Input(1, Input[0], No_of_AccountsCounter); //Input validation
-			cout << "Enter the 4-digit PIN. perform Transaction:";
+			cout << "Enter the 4-digit PIN. perform Transaction:" << A[Input[0]].getPIN();
 			for (loop = 0; loop < 4; loop++)
 			{
 				PIN[loop] = _getch();	//User Entering PIN
+				while (PIN[loop] < 48 || PIN[loop] > 57) {
+					if (PIN[loop] == 8)//Allow user to retype/backspace pin
+					{
+						if (loop >= 0) {
+							cout << "\b \b";
+							if (loop != 0)
+							loop--;
+						}
+					}
+					PIN[loop] = _getch();
+				}
 				cout << "*";
 			}PIN[4] = '\0';
 			if (!(strcmp(A[Input[0]].getPIN(), PIN))) //PIN Matching
 			{
-				cout << "\nSelect Account. Transfer Amount TO:";
-				Input[1] = _getch() - '0';				validate_Input(1, Input[1], No_of_AccountsCounter);//Input validation
-				cout << "Enter Amount. Transfer:";
+				cout << "\nSelect Account To Transfer Amount TO:";
+				Input[1] = _getch() - '0';	validate_Input(1, Input[1], No_of_AccountsCounter);//Input validation
+				cout << "Enter Amount To Transfer:";
 				cin >> Amount;
 				if (transfer(A[Input[0]], A[Input[1]], Amount)) //transfer() function returns bool(1/0).
 					cout << "Transaction is Sucessful" << endl;
